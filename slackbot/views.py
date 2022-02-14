@@ -7,7 +7,7 @@ import datetime
 from google_play_scraper import app, Sort, reviews, reviews_all
 
 import requests
-import templates.Constants as const
+import templates.Consts as const
 import json
 
 from django.core.serializers.json import DjangoJSONEncoder

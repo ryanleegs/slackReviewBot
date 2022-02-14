@@ -4,7 +4,7 @@ from slack_sdk import WebClient
 
 import datetime
 
-import templates.Constants as const
+import templates.Consts as const
 from django.db import connection
 
 # 슬랙 세팅
