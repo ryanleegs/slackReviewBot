@@ -21,47 +21,6 @@ from slackReviewBot import settings
 slack = WebClient(token=const.slackToken)
 
 
-@csrf_exempt
-def post(request):
-
-    print("text =========>",text)
-    json_dict = json.loads(request.body.decode('utf-8'))
-    if json_dict['token'] != settings.VERIFICATION_TOKEN:
-        return HttpResponse(status=403)
-    if 'type' in json_dict:
-        if json_dict['type'] == 'url_verification':
-            response_dict = {"challenge": json_dict['challenge']}
-            return JsonResponse(response_dict, safe=False)
-    if 'event' in json_dict:
-        event_msg = json_dict['event']
-        if ('subtype' in event_msg) and (event_msg['subtype'] == 'bot_message'):
-            return HttpResponse(status=200)
-    if event_msg['type'] == 'message':
-        user = event_msg['user']
-        channel = event_msg['channel']
-        response_msg = ":wave:, Hello <@%s>" % user
-        slack.chat_postMessage(channel=channel, text=response_msg)
-        # return slack.chat_postMessage(
-        #     channel="#chatbot_test"
-        #     , attachments=[
-        #         {
-        #             "color": "#f2c744",
-        #             "blocks": [
-        #                 {
-        #                     "type": "section",
-        #                     "text": {
-        #                         "type": "mrkdwn",
-        #                         "text": "<@" + user_token + "> " + user_name + "매니저님!!!!!!! 일일점검 하실 시간입니다!"
-        #                     }
-        #                 }
-        #             ]
-        #         }
-        #     ]
-        # )
-        return HttpResponse(status=200)
-    return HttpResponse(status=200)
-
-
 class mobileTeamList(APIView):
     def post(self, request):
         # try:
@@ -91,8 +50,6 @@ class mobileTeamList(APIView):
         #     mem_list = list(memList["members"])
         #     print(mem_list[index])
 
-        # user token xoxp-1186584612579-2262738442850-2663807584566-67c0e98c2e687f80e94b97bb96f3f5a4
-        # bot token xoxb-1186584612579-2594811747253-BMFPo2UYiJtcDOFB2GZcSWd9
 
         return Response(status=200, data=dict(challenge=challenge))
 
