@@ -5,12 +5,7 @@ from rest_framework.response import Response
 from slack_sdk import WebClient
 
 import datetime
-import numpy as np
-import pandas as pd
 import templates.Consts as const
-from django.db import connection
-from notionist import collection_api
-from notion.client import NotionClient
 
 # 슬랙 세팅
 slack = WebClient(token=const.slackToken)
