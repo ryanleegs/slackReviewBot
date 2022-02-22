@@ -31,4 +31,5 @@ urlpatterns = [
     path('google', views.reviewPost.as_view()),
     path('dailyPm', dailyPM.dailyPost.as_view()),
     path('mobileTeam', mobile.mobileTeamList.as_view()),
+    path('secretaryManagerList', mobile.secretaryManagerList.as_view()),
 ]

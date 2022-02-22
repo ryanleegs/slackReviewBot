@@ -1,11 +1,16 @@
+import json
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from slack_sdk import WebClient
 
 import datetime
-
+import numpy as np
+import pandas as pd
 import templates.Consts as const
 from django.db import connection
+from notionist import collection_api
+from notion.client import NotionClient
 
 # 슬랙 세팅
 slack = WebClient(token=const.slackToken)
@@ -13,47 +18,74 @@ slack = WebClient(token=const.slackToken)
 
 class employeeList():
     def post(self):
-        try:
-            """
+        # try:
+        """
                 TODO 
                 1. mariaDB에 각 담당자 데이터 관리
                 2. 노션에 각 담당자 데이터 관리
             """
 
-            # 1번
-            cursor = connection.cursor()
-            today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            strSql = "SELECT * FROM gsitmmobile.employee_info WHERE start_dt <= %s AND end_dt >= %s"
-            result = cursor.execute(strSql, (today, today))  # 실행 여부 성공 1 실패 0 ?
-            nlist = cursor.fetchall()
-            connection.commit()
-            connection.close()
+        # 1번
+        # nlist = ""
+        # cursor = connection.cursor()
+        # today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        # strSql = "SELECT * FROM gsitmmobile.employee_info WHERE start_dt <= %s AND end_dt >= %s"
+        # result = cursor.execute(strSql, (today, today))  # 실행 여부 성공 1 실패 0 ?
+        # nlist = cursor.fetchall()
+        # connection.commit()
+        # connection.close()
+        # except:
+        #     # 1번
+        #     #connection.rollback()
+        #     print("Failed !!!!!!!!!!!!!!!!!!!!!!!")
 
-            # 2번
-            """
-                TODO 
-                token = 'a8b1f42ae4c723ba17c34e749b06e38cc7c46b66b7c264533ec98c51469a733e5a7409a65a4db7353a02fb0c41c0682683070ef8e7a86008cf359a9dd50920f6426fd6dd531a69a621e65771fcca'
-                
-                
-            """
-        except:
-            # 1번
-            connection.rollback()
-            print("Failed !!!!!!!!!!!!!!!!!!!!!!!")
+        with open('templates/dailyPM_config.json', 'r', encoding='utf-8') as f:
+            member_data = json.load(f)
 
-        return nlist
+        today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        pm_member = []
+        for part_data in member_data["part"]:
+            for today_member in part_data["market-online"]:
+                start_dt = today_member["start_dt"]
+                end_dt = today_member["end_dt"]
+                if start_dt <= today <= end_dt:
+                    pm_member.append(today_member)
+
+        return pm_member
 
 
 class dailyPost(APIView):
     def post(self, request):
         challenge = request.data.get('challenge')
-        name = list(employeeList.post(self))
-        print("name ========>", name)
-        sendSlack.send(name)
+        # name = list(employeeList.post(self))
+        # sendSlack.send(name)
+        name = employeeList.post(self)
+        sendSlack.send_pm(name)
         return Response(status=200, data=dict(challenge=challenge))
 
 
 class sendSlack():
+
+    def send_pm(lst):
+        user_name = lst[0]["name"]
+        user_token = lst[0]["member_id"]
+        return slack.chat_postMessage(
+            channel="#chatbot_test"
+            , attachments=[
+                {
+                    "color": "#f2c744",
+                    "blocks": [
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": "<@" + user_token + "> " + user_name + "매니저님!!!!!!! 일일점검 하실 시간입니다!"
+                            }
+                        }
+                    ]
+                }
+            ]
+        )
 
     def send(lst):
         user_name = lst[0][1]

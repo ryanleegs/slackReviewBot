@@ -11,6 +11,7 @@ from slack_sdk import WebClient
 
 import re
 import datetime
+from datetime import date, timedelta
 
 import templates.Consts as const
 from django.db import connection
@@ -50,75 +51,46 @@ class mobileTeamList(APIView):
         #     mem_list = list(memList["members"])
         #     print(mem_list[index])
 
-
         return Response(status=200, data=dict(challenge=challenge))
 
 
-class lunch_menu(APIView):
-
+class secretaryManagerList(APIView):
     def post(self, request):
         challenge = request.data.get('challenge')
+        today = date.today()
+        # C02TN889Q6N 간사매니저 채널 아이디 / C02HD2Q7DE2 - 챗봇테스트 채널 아이디
+        # channel = "C02TN889Q6N"
+        # 1월 U01JZDEFMRQ - 박다솜 / U027QTQQS75 - 김우영
+        # 2월 U020C787MC1 - 최윤서 / U02S0572ULA - 장대현
+        # 3월 U027QMQD0R0 - 이승준 / U01HSRSB0BY - 권형조
+        # 4월 U027MN9MDPX - 강명묵 / U02CR9LGB6F - 최문식
+        # 5월 U02QWHYUXC7 - 김대연 /  - 차승욱
+        # 6월 U02RB6EM5RQ - 이승찬 / U02GG41PHPG - 차수연
+        # 7월 U015KNW3CKZ - 김희진 / U01HSRSB0BY - TBD
+        # 8월 U01JZDEFMRQ - 박다솜 / U027QTQQS75 - 김우영
+        # 9월 U02S0572ULA - 장대현 / U020C787MC1 - 최윤서
+        # 10월 U027QMQD0R0 - 이승준 / U01HSRSB0BY - 권형조
+        # 11월 U027MN9MDPX - 강명묵 / U02CR9LGB6F - 최문식
+        # 12월 U02QWHYUXC7 - 김대연 /  - 차승욱
+
+        # test U031YS3HYFP - 박민규 / U02QWHYUXC7 - 김대연
+
+        with open('templates/member_config.json', 'r', encoding='utf-8') as f:
+            member_data = json.load(f)
+
+        month = date.today().month
+        month_ago = (today.replace(day=1) - timedelta(days=1)).month
+
+        for mem_data in member_data["member"]:
+            mem_mth = mem_data["secretary_month"]
+
+            if mem_mth == month:
+                invite_member = [mem_data["member_id"]]
+                for mem_list in invite_member:
+                    slack.conversations_invite(token=const.slackToken, channel="C02HD2Q7DE2", users=mem_list)
+            if mem_mth == month_ago:
+                kick_member = [mem_data["member_id"]]
+                for mem_list in kick_member:
+                    slack.conversations_kick(token=const.slackToken, channel="C02HD2Q7DE2", user=mem_list)
 
         return Response(status=200, data=dict(challenge=challenge))
-
-
-class greeat(APIView):
-    def get_content(self):
-        # get_content() #현재 선택된 항목을 읽어온다.
-        # return [URL, 게시글, 올린 날짜, 좋아요 개수, 지정 위치, 해쉬태그] ################################################
-        # 1. 현재 페이지의 HTML 정보 가져오기
-        html = self.driver.page_source
-        soup = BeautifulSoup(html, 'lxml')
-        ################################################
-        ### 2. 본문 내용 가져오기
-        try:  # 여러 태그중 첫번째([0]) 태그를 선택
-            strInstaId = soup.select('div.e1e1d')[0].text
-        except:
-            strInstaId = ' '
-            contentTmp = str()
-
-            # 여러 태그중 첫번째([0]) 태그를 선택
-            try:
-                content2 = soup.select('div.C4VMK > span')[0]
-                for contentDetail in content2.contents:
-                    # 공백, 스페이스 1번을 없애주기위해서.. len을 넣은 이유는 공백과 스페이스바를 추가해도 분기 무시를 안하는 경우가 있어서!
-                    if (type(contentDetail).__name__ is "NavigableString"):
-                        if contentDetail is not "" and contentDetail is not " " and len(contentDetail) is not 1 and len(
-                                contentDetail) is not 0:
-                            contentTmp += contentDetail + "\t"
-                        elif (type(contentDetail).__name__ is "Tag"):
-                            # 첫 게시글 본문 내용이 <div class="C4VMK"> 임을 알 수 있다. #태그명이 div, class명이 C4VMK인 태그 아래에 있는 span 태그를 모두 선택.
-                            if contentDetail.text is not "" and contentDetail.text is not " ":
-                                contentTmp += contentDetail.text + "\t"
-            except:
-                content2 = ' '
-            ################################################ # 3. 본문 내용에서 해시태그 가져오기(정규표현식 활용)
-
-            # content 변수의 본문 내용 중 #으로 시작하며, #뒤에 연속된 문자(공백이나 #, \ 기호가 아닌 경우)를 모두 찾아 tags 변수에 저장 # 4. 작성 일자 가져오기
-            tags = re.findall(r'#[^\s#,\\]+', contentTmp)
-            # 앞에서부터 10자리 글자
-
-            try:
-                date = str(soup.select('time._1o9PC.Nzb55')[0]['datetime'])
-            except:
-                date = ''
-
-            TIdx = date.find('T')
-            dateValue = date[0:TIdx] + " " + date[TIdx + 1:TIdx + 9]  # 5. 좋아요 수 가져오기
-
-            try:
-                strTemp = str(soup.select('div.Nm9Fw > button')[0].text)
-                strTemp = strTemp.replace(",", "");
-                strTemp = strTemp.replace("외", "");
-                strTemp = strTemp.replace("명", "");
-                strTemp = strTemp.replace(" ", "");
-                like = strTemp
-            except:
-                like = 0
-            # 6. 위치 정보 가져오기
-            try:
-                place = str(soup.select('div.JF9hh')[0].text)
-            except:
-                place = ''
-                data = [self.driver.current_url, strInstaId, contentTmp, dateValue, like, place, tags]
-        return data

@@ -1,0 +1,41 @@
+{
+  "team": "mobile",
+  "member": [
+    {"name": "박다솜","member_id": "U01JZDEFMRQ","secretary_month":1 },
+    {"name": "김우영","member_id": "U027QTQQS75","secretary_month":1 },
+    {"name": "최윤서","member_id": "U020C787MC1","secretary_month":2 },
+    {"name": "장대현","member_id": "U02S0572ULA","secretary_month":2 },
+    {"name": "이승준","member_id": "U027QMQD0R0","secretary_month":3 },
+    {"name": "권형조","member_id": "U01HSRSB0BY","secretary_month":3 },
+    {"name": "강명묵","member_id": "U027MN9MDPX","secretary_month":4 },
+    {"name": "최문식","member_id": "U02CR9LGB6F","secretary_month":4 },
+    {"name": "김대연","member_id": "U02QWHYUXC7","secretary_month":5 },
+    {"name": "차승욱","member_id": ""           ,"secretary_month":5 },
+    {"name": "이승찬","member_id": "U02RB6EM5RQ","secretary_month":6 },
+    {"name": "차수연","member_id": "U02GG41PHPG","secretary_month":6 },
+    {"name": "김희진","member_id": "U015KNW3CKZ","secretary_month":7 },
+    {"name": "박민규","member_id": "U031YS3HYFP","secretary_month":7 },
+    {"name": "박다솜","member_id": "U01JZDEFMRQ","secretary_month":8 },
+    {"name": "김우영","member_id": "U027QTQQS75","secretary_month":8 },
+    {"name": "장대현","member_id": "U02S0572ULA","secretary_month":9 },
+    {"name": "최윤서","member_id": "U020C787MC1","secretary_month":9 },
+    {"name": "이승준","member_id": "U027QMQD0R0","secretary_month":10 },
+    {"name": "권형조","member_id": "U01HSRSB0BY","secretary_month":10 },
+    {"name": "강명묵","member_id": "U027MN9MDPX","secretary_month":11 },
+    {"name": "최문식","member_id": "U02CR9LGB6F","secretary_month":11 },
+    {"name": "김대연","member_id": "U02QWHYUXC7","secretary_month":12 },
+    {"name": "차승욱","member_id": ""           ,"secretary_month":12 }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+

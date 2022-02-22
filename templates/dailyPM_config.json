@@ -1,0 +1,31 @@
+{
+  "team": "mobile",
+  "part": [
+    {
+      "market-online": [
+        {"name": "이승준","member_id": "U027QMQD0R0","act_yn":"N","start_dt" : "2022-02-21 00:00:00", "end_dt": "2022-02-26 00:00:00" },
+        {"name": "강명묵","member_id": "U027MN9MDPX","act_yn":"N","start_dt" : "2022-02-28 00:00:00", "end_dt": "2022-03-04 00:00:00" },
+        {"name": "김대연","member_id": "U02QWHYUXC7","act_yn":"N","start_dt" : "2022-03-07 00:00:00", "end_dt": "2022-03-11 00:00:00" },
+        {"name": "이승찬","member_id": "U02RB6EM5RQ","act_yn":"N","start_dt" : "2022-03-14 00:00:00", "end_dt": "2022-03-18 00:00:00" },
+        {"name": "박민규","member_id": "U031YS3HYFP","act_yn":"N","start_dt" : "2022-03-21 00:00:00", "end_dt": "2022-03-25 00:00:00" }
+
+      ],
+      "caltex-online": [
+        {"name": "박다솜","member_id": "U01JZDEFMRQ","act_yn":"N" },
+        {"name": "장대현","member_id": "U02S0572ULA","act_yn":"N" }
+      ]
+    }
+  ]
+}
+
+
+
+
+
+
+
+
+
+
+
+
