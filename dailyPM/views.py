@@ -64,6 +64,8 @@ class sendSlack():
     def send_pm(lst):
         user_name = lst[0]["name"]
         user_token = lst[0]["member_id"]
+        print(lst)
+        today = datetime.datetime.now().strftime("%Y-%m-%d")
         return slack.chat_postMessage(
             channel="C016DHDF0G1"
             # C034YUUS3H6 : chatbot_test2
@@ -71,19 +73,62 @@ class sendSlack():
             # C016DHDF0G1 : 자사-온라인
             , attachments=[
                 {
-                    "color": "#f2c744",
+                    "color": "#D2B48C",
                     "blocks": [
                         {
-                            "type": "section",
+                            "type": "header",
                             "text": {
-                                "type": "mrkdwn",
-                                "text": "<@" + user_token + "> " + user_name + "매니저님! 일일점검 언능 하시고 커피드세요!"
+                                "type": "plain_text",
+                                "text": "일일점검 시간",
                             }
+                        },
+                        {
+                            "type": "section",
+                            "fields": [
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*점검자:*\n" + "<@" + user_token + "> " + user_name + "매니저님"
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*점검일:*\n" + today + "\n"
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*내용:*\n B2C대량메일 \n KIXX \n 웹쉘솔루션 \n 설문솔루션"
+                                },
+                                {
+                                    "type": "mrkdwn",
+                                    "text": "*비고:*\n 후딱 하고 커피 커피 \n "+ user_name + " 매니저 부재 시 다른 분이 해주세요"
+                                }
+                            ],
+                            "accessory": {
+                                "type": "image",
+                                "image_url": "https://search.pstatic.net/common?type=ofullfill&size=138x138&fillColor=ffffff&quality=75&direct=true&src=https%3A%2F%2Fboard.jinhak.com%2FBoardV1%2FUpload%2FJob%2FCompany%2FCI%2F243139.jpg",
+                                "alt_text": "아이콘"
+                            }
+                        },
+                        {
+                            "type": "divider"
                         }
                     ]
                 }
             ]
-        )
+        #     , attachments=[
+        #         {
+        #             "color": "#f2c744",
+        #             "blocks": [
+        #                 {
+        #                     "type": "section",
+        #                     "text": {
+        #                         "type": "mrkdwn",
+        #                         "text": "<@" + user_token + "> " + user_name + "매니저님! 일일점검 언능 하시고 커피드세요!"
+        #                     }
+        #                 }
+        #             ]
+        #         }
+        #     ]
+         )
 
     def send(lst):
         user_name = lst[0][1]
