@@ -65,7 +65,10 @@ class sendSlack():
         user_name = lst[0]["name"]
         user_token = lst[0]["member_id"]
         return slack.chat_postMessage(
-            channel="#chatbot_test"
+            channel="C016DHDF0G1"
+            # C034YUUS3H6 : chatbot_test2
+            # C02HD2Q7DE2 : chatbot_test
+            # C016DHDF0G1 : 자사-온라인
             , attachments=[
                 {
                     "color": "#f2c744",
@@ -74,7 +77,7 @@ class sendSlack():
                             "type": "section",
                             "text": {
                                 "type": "mrkdwn",
-                                "text": "<@" + user_token + "> " + user_name + "매니저님!!!!!!! 일일점검 하실 시간입니다!"
+                                "text": "<@" + user_token + "> " + user_name + "매니저님! 일일점검 언능 하시고 커피드세요!"
                             }
                         }
                     ]
