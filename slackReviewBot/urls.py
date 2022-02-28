@@ -27,8 +27,8 @@ import mobileTeam.views as mobile
 urlpatterns = [
     path('admin/', admin.site.urls),    # 이건 원래 있던거
     path('', api.Api.as_view()),        # slack Event Subscriptions 전용
-    path('api', views.Api.as_view()),
-    path('google', views.reviewPost.as_view()),
+   # path('api', views.Api.as_view()),
+    path('review', views.reviewPost.as_view()),
     path('dailyPm', dailyPM.dailyPost.as_view()),
     path('mobileTeam', mobile.mobileTeamList.as_view()),
     path('secretaryManagerList', mobile.secretaryManagerList.as_view()),

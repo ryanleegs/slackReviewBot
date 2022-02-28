@@ -58,7 +58,7 @@ class secretaryManagerList(APIView):
     def post(self, request):
         challenge = request.data.get('challenge')
         today = date.today()
-        # C02TN889Q6N 간사매니저 채널 아이디 / C02HD2Q7DE2 - 챗봇테스트 채널 아이디
+        # C02TN889Q6N 간사매니저 채널 아이디 / C02HD2Q7DE2 - 챗봇테스트 채널 아이디 / C034F1Z4ZKR - chatbot_test3
         # channel = "C02TN889Q6N"
         # 1월 U01JZDEFMRQ - 박다솜 / U027QTQQS75 - 김우영
         # 2월 U020C787MC1 - 최윤서 / U02S0572ULA - 장대현
@@ -80,17 +80,16 @@ class secretaryManagerList(APIView):
 
         month = date.today().month
         month_ago = (today.replace(day=1) - timedelta(days=1)).month
-
         for mem_data in member_data["member"]:
             mem_mth = mem_data["secretary_month"]
 
             if mem_mth == month:
                 invite_member = [mem_data["member_id"]]
                 for mem_list in invite_member:
-                    slack.conversations_invite(token=const.slackToken, channel="C02HD2Q7DE2", users=mem_list)
+                    slack.conversations_invite(token=const.slackToken, channel="C02TN889Q6N", users=mem_list)
             if mem_mth == month_ago:
                 kick_member = [mem_data["member_id"]]
                 for mem_list in kick_member:
-                    slack.conversations_kick(token=const.slackToken, channel="C02HD2Q7DE2", user=mem_list)
+                    slack.conversations_kick(token=const.slackToken, channel="C02TN889Q6N", user=mem_list)
 
         return Response(status=200, data=dict(challenge=challenge))
