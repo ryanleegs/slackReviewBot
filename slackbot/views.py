@@ -1,5 +1,4 @@
 # ~/slackbot/views.py
-import dateutil
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from slack_sdk import WebClient
@@ -50,8 +49,9 @@ def iOS_review(review_id, review_code):
 
     for index, iosList in enumerate(ios_app_list):
         _reg_dtime = iosList["updated"]["label"]
-        _reg_dtime_str = dateutil.parser.isoparse(_reg_dtime).strftime("%Y-%m-%d %H:%M:%S")
+        _reg_dtime_str = datetime.datetime.fromisoformat(_reg_dtime).strftime("%Y-%m-%d %H:%M:%S")
         reg_dtime = datetime.datetime.strptime(_reg_dtime_str, "%Y-%m-%d %H:%M:%S")
+
 
         if reg_dtime > yesterday:
             iosList["title"] = {"label": review_code}
@@ -146,6 +146,14 @@ class sendIosMessage():
         }
         return urlData.get(text)
 
+    def getTitle(text):
+        titleData = {
+            "EP": "Energy Plus",
+            "EV": "Energy Plus EV",
+            "GSNPT": "GS&POINT",
+        }
+        return titleData.get(text)
+
     def getImgUrl(text):
         imgUrlData = {
             "EP": "https://play-lh.googleusercontent.com/brnsmY_M7QjBj_hYYAJv8yxE8zTtiNUyQd_f8xtmMVpR85Ppwvbgi6bZ-vD2FzH4TQ",
@@ -160,7 +168,8 @@ class sendSlack:
     def send(rlist, text):
 
         if text in "IOS":
-            title = "iOS 앱 리뷰"
+            title = sendIosMessage.getTitle(rlist["title"]["label"])
+            title_emoji = ":ios:"
             content = rlist["content"]["label"]
             avg = rlist["im:rating"]["label"]
             avg_star = ":star:" * int(avg)
@@ -173,10 +182,11 @@ class sendSlack:
             review_name = rlist["author"]["name"]["label"]
             review_uri = rlist["author"]["uri"]["label"]
             img_url = sendIosMessage.getImgUrl(rlist["title"]["label"])
-            reg_date = dateutil.parser.isoparse(rlist["updated"]["label"]).strftime("%Y-%m-%d %H:%M:%S")
+            reg_date = datetime.datetime.fromisoformat(rlist["updated"]["label"]).strftime("%Y-%m-%d %H:%M:%S")
 
         elif text in "ANDROID":
-            title = "안드로이드 앱 리뷰"
+            title = sendIosMessage.getTitle(rlist[0]["app_title"])
+            title_emoji = ":android:"
             content = rlist[0]["content"]
             avg = rlist[0]["score"]
             avg_star = ":star:" * avg
@@ -201,7 +211,7 @@ class sendSlack:
                             "type": "header",
                             "text": {
                                 "type": "plain_text",
-                                "text": title,
+                                "text": title + " " + title_emoji + "\n" + avg_star,
                             }
                         },
                         {
@@ -215,19 +225,18 @@ class sendSlack:
                                     "type": "mrkdwn",
                                     "text": "*Date:*\n" + reg_date + "\n"
                                 },
-                                {
-                                    "type": "mrkdwn",
-                                    "text": "*내용:*\n" + content
-                                },
-                                {
-                                    "type": "mrkdwn",
-                                    "text": "*평점:*\n" + avg_star
-                                }
                             ],
                             "accessory": {
                                 "type": "image",
                                 "image_url": img_url,
                                 "alt_text": "아이콘"
+                            }
+                        },
+                        {
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": "*내용:*\n" + content
                             }
                         },
                         {
