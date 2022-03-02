@@ -1,4 +1,5 @@
 # ~/slackbot/views.py
+import parser
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,7 +10,7 @@ from google_play_scraper import app, Sort, reviews, reviews_all
 
 import requests
 import templates.Consts as const
-from dateutil import parser
+#from dateutil import parser
 
 # 슬랙 세팅
 slack = WebClient(token=const.slackToken)
