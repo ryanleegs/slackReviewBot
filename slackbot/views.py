@@ -1,6 +1,5 @@
 # ~/slackbot/views.py
-import parser
-
+import dateutil
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from slack_sdk import WebClient
@@ -10,7 +9,7 @@ from google_play_scraper import app, Sort, reviews, reviews_all
 
 import requests
 import templates.Consts as const
-#from dateutil import parser
+from dateutil import parser
 
 # 슬랙 세팅
 slack = WebClient(token=const.slackToken)
@@ -51,8 +50,7 @@ def iOS_review(review_id, review_code):
 
     for index, iosList in enumerate(ios_app_list):
         _reg_dtime = iosList["updated"]["label"]
-
-        _reg_dtime_str = parser.isoparse(_reg_dtime).strftime("%Y-%m-%d %H:%M:%S")
+        _reg_dtime_str = dateutil.parser.isoparse(_reg_dtime).strftime("%Y-%m-%d %H:%M:%S")
         reg_dtime = datetime.datetime.strptime(_reg_dtime_str, "%Y-%m-%d %H:%M:%S")
 
         if reg_dtime > yesterday:
@@ -175,7 +173,7 @@ class sendSlack:
             review_name = rlist["author"]["name"]["label"]
             review_uri = rlist["author"]["uri"]["label"]
             img_url = sendIosMessage.getImgUrl(rlist["title"]["label"])
-            reg_date = parser.isoparse(rlist["updated"]["label"]).strftime("%Y-%m-%d %H:%M:%S")
+            reg_date = dateutil.parser.isoparse(rlist["updated"]["label"]).strftime("%Y-%m-%d %H:%M:%S")
 
         elif text in "ANDROID":
             title = "안드로이드 앱 리뷰"
