@@ -8,7 +8,6 @@ from google_play_scraper import app, Sort, reviews, reviews_all
 
 import requests
 import templates.Consts as const
-from dateutil import parser
 
 # 슬랙 세팅
 slack = WebClient(token=const.slackToken)
