@@ -201,7 +201,7 @@ class sendSlack:
             reg_date = datetime.datetime.strftime(rlist[0]["at"], "%Y-%m-%d %H:%M:%S")
 
         return slack.chat_postMessage(
-            channel="C034SUVQCS1"
+            channel="C034ZC2R5TR"
             , attachments=[
                 {
                     "color": color,
