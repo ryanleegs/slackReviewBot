@@ -1,4 +1,5 @@
 import json
+import this
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -99,7 +100,7 @@ class sendSlack():
                                 },
                                 {
                                     "type": "mrkdwn",
-                                    "text": "*비고:*\n 후딱 하고 커피 커피 \n "+ user_name + " 매니저 부재 시 다른 분이 해주세요"
+                                    "text": "*비고:*\n 후딱 하고 커피 커피 \n " + user_name + " 매니저 부재 시 다른 분이 해주세요"
                                 }
                             ],
                             "accessory": {
@@ -114,21 +115,21 @@ class sendSlack():
                     ]
                 }
             ]
-        #     , attachments=[
-        #         {
-        #             "color": "#f2c744",
-        #             "blocks": [
-        #                 {
-        #                     "type": "section",
-        #                     "text": {
-        #                         "type": "mrkdwn",
-        #                         "text": "<@" + user_token + "> " + user_name + "매니저님! 일일점검 언능 하시고 커피드세요!"
-        #                     }
-        #                 }
-        #             ]
-        #         }
-        #     ]
-         )
+            #     , attachments=[
+            #         {
+            #             "color": "#f2c744",
+            #             "blocks": [
+            #                 {
+            #                     "type": "section",
+            #                     "text": {
+            #                         "type": "mrkdwn",
+            #                         "text": "<@" + user_token + "> " + user_name + "매니저님! 일일점검 언능 하시고 커피드세요!"
+            #                     }
+            #                 }
+            #             ]
+            #         }
+            #     ]
+        )
 
     def send(lst):
         user_name = lst[0][1]
@@ -151,3 +152,46 @@ class sendSlack():
                 }
             ]
         )
+
+
+class drawUpWeekly(APIView):
+    def post(self, request):
+        challenge = request.data.get('challenge')
+        sendSlackWeekly()
+        return Response(status=200, data=dict(challenge=challenge))
+
+
+def sendSlackWeekly():
+    return slack.chat_postMessage(
+        channel="C016DHDF0G1"
+        # C034YUUS3H6 : chatbot_test2
+        # C02HD2Q7DE2 : chatbot_test
+        # C0358924H41 : chatbot_test4
+        # C016DHDF0G1 : 자사-온라인
+        , attachments=[
+            {
+                "color": "#f2c744",
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "@channel 주간보고 작성해주세요!"
+                        }
+                    },{
+                        "type": "section",
+                        "fields": [
+                            {
+                                "type": "mrkdwn",
+                                "text": "*주간보고 링크:*\n https://docs.google.com/spreadsheets/d/1PbHyVLmkaaqN61f0HvzyiVTsUB7QYw3q/edit#gid=1583622410"
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": "*비고:*\n 점심먹기 전까지 작성부탁드립니다."
+                            }
+                        ]
+                    },
+                ]
+            }
+        ]
+    )
