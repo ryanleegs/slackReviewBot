@@ -1,58 +1,17 @@
+import datetime
 import json
-
-from bs4 import BeautifulSoup
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
-from django.views.decorators.csrf import csrf_exempt
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from slack_sdk import WebClient
 
-import re
-import datetime
 from datetime import date, timedelta
 
 import templates.Consts as const
 from django.db import connection
 
 # 슬랙 세팅
-from slackReviewBot import settings
-
 slack = WebClient(token=const.slackToken)
-
-
-class mobileTeamList(APIView):
-    def post(self, request):
-        # try:
-        #     cursor = connection.cursor()
-        #
-        #     today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        #
-        #     strSql = "SELECT * FROM gsitmmobile.employee_info WHERE start_dt <= %s AND end_dt >= %s"
-        #     teamlist = slack.team_profile_get()
-        #     print("teamlist ====>",teamlist)
-        #     result = cursor.execute(strSql, (today, today))  # 실행 여부 성공 1 실패 0 ?
-        #     nlist = cursor.fetchall()
-        #
-        #     connection.commit()
-        #     connection.close()
-        #
-        # except:
-        #     connection.rollback()
-        #     print("Failed !!!!!!!!!!!!!!!!!!!!!!!")
-        # return nlist
-
-        challenge = request.data.get('challenge')
-
-        usr = slack.users_list()
-
-        # for index, memList in enumerate(usr):
-        #     mem_list = list(memList["members"])
-        #     print(mem_list[index])
-
-        return Response(status=200, data=dict(challenge=challenge))
-
 
 class secretaryManagerList(APIView):
     def post(self, request):
@@ -93,3 +52,47 @@ class secretaryManagerList(APIView):
                     slack.conversations_kick(token=const.slackToken, channel="C02TN889Q6N", user=mem_list)
 
         return Response(status=200, data=dict(challenge=challenge))
+
+
+
+class drawUpWeekly(APIView):
+    def post(self, request):
+        challenge = request.data.get('challenge')
+        sendSlackWeekly()
+        return Response(status=200, data=dict(challenge=challenge))
+
+
+def sendSlackWeekly():
+    return slack.chat_postMessage(
+        channel="C016DHDF0G1"
+        # C034YUUS3H6 : chatbot_test2
+        # C02HD2Q7DE2 : chatbot_test
+        # C0358924H41 : chatbot_test4
+        # C016DHDF0G1 : 자사-온라인
+        , attachments=[
+            {
+                "color": "#f2c744",
+                "blocks": [
+                    {
+                        "type": "section",
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": "@channel 주간보고 작성해주세요!"
+                        }
+                    }, {
+                        "type": "section",
+                        "fields": [
+                            {
+                                "type": "mrkdwn",
+                                "text": "*주간보고 링크:*\n https://docs.google.com/spreadsheets/d/1PbHyVLmkaaqN61f0HvzyiVTsUB7QYw3q/edit#gid=1583622410"
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": "*비고:*\n 점심먹기 전까지 작성부탁드립니다."
+                            }
+                        ]
+                    },
+                ]
+            }
+        ]
+    )

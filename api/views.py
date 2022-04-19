@@ -1,5 +1,10 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from slack_sdk import WebClient
+
+import templates.Consts as const
+
+slack = WebClient(token=const.slackToken)
 
 class Api(APIView):
 

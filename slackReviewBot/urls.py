@@ -30,7 +30,8 @@ urlpatterns = [
    # path('api', views.Api.as_view()),
     path('review', views.reviewPost.as_view()),
     path('dailyPm', dailyPM.dailyPost.as_view()),
-    path('mobileTeam', mobile.mobileTeamList.as_view()),
     path('secretaryManagerList', mobile.secretaryManagerList.as_view()),
-    path('drawUpWeekly', dailyPM.drawUpWeekly.as_view()),
+    path('drawUpWeekly', mobile.drawUpWeekly.as_view()),
 ]
+
+
